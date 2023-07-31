@@ -1,0 +1,131 @@
+{
+  "type_map": ["Ti","O","Li"],
+  "mass_map": [47.87,16.00,6.941],
+
+  "_comment": "initial data set for Training and the number of frames in each training  batch",
+  "init_data_prefix": "./",
+  "init_data_sys":   [
+    "Data/deepmd"
+  ],
+  "init_batch_size": [
+    16
+  ],
+
+  "_comment": "configurations for starting MD in Exploration and batch sizes when traning snapshots derived from these configs (if they were selected)",
+  "sys_configs_prefix": "./",
+  "sys_configs":    [
+    [
+     "Data/devi/0*/POSCAR"
+    ],
+    [
+     "c2h6.POSCAR.01x01x01/01.scale_pert/sys-0002-0006/scale-1.000/000100/POSCAR"
+    ]
+  ],
+
+  "_comment": " 00.train ",
+  "numb_models":            4,
+  "_training_init_model":    true,
+  "_training_iter0_model_path":["/home/yinbc/test/dpgen/dpgen/pt1/iter.000000/01.model_devi/graph.000.pb","/home/yinbc/test/dpgen/dpgen/pt1/iter.000000/01.model_devi/graph.001.pb","/home/yinbc/test/dpgen/dpgen/pt1/iter.000000/01.model_devi/graph.002.pb","/home/yinbc/test/dpgen/dpgen/pt1/iter.000000/01.model_devi/graph.003.pb"],
+  "_training_reuse_iter":    1,
+  "_training_reuse_old_ratio": 1.0,
+  "_training_reuse_stop_batch": 10000,
+  "_training_reuse_start_lr":      0.0001,
+  "_training_reuse_start_pref_e":  0.1,
+  "_training_reuse_start_pref_f":  200,
+  "default_training_param": {
+    "model": {
+      "type_map":           ["Ti","O","Li"],
+      "descriptor": {
+        "type":             "se_a",
+        "sel":              [16,16,16],
+        "rcut_smth":         0.5,
+        "rcut":              5.0,
+        "neuron":           [120,120,120],
+        "resnet_dt":        true,
+        "axis_neuron":      12,
+        "seed":             1
+      },
+      "fitting_net": {
+        "neuron":           [120,120,120],
+        "resnet_dt":        false,
+        "seed":             0
+      }
+    },
+      "loss": {
+        "start_pref_e":      0.02,
+        "limit_pref_e":      1,
+        "start_pref_f":      1000,
+        "limit_pref_f":      1,
+        "start_pref_v":      0,
+        "limit_pref_v":      0
+    },
+      "learning_rate": {
+        "type":              "exp",
+        "start_lr":          0.001,
+        "decay_steps":       500
+
+    },
+      "training": {
+            "stop_batch": 10000,
+            "disp_file": "lcurve.out",
+            "disp_freq": 100,
+            "numb_test": 4,
+            "save_freq": 1000,
+            "save_ckpt": "model.ckpt",
+            "disp_training": true,
+            "time_training": true,
+            "profiling": false,
+            "profiling_file": "timeline.json",
+            "_comment": "that's all"
+    }
+  },
+
+  "_comment": " 01.model_devi ",
+  "model_devi_engine":"dimer",
+  "model_devi_dt": 0.0005,
+  "model_devi_skip": 0,
+  "model_devi_f_trust_lo":  0.10,
+  "model_devi_f_trust_hi":  5.5,
+ "_model_devi_adapt_trust_lo":true,
+
+  "model_devi_clean_traj":  false,
+  "model_devi_plumed"    : false,
+  "model_devi_jobs":  [
+        {
+	        "sys_idx": [0],"trj_freq": 100,"_idx": "00","temps":[300],"press":[1],"nsteps":20000,"ensemble":"NVT",	
+            "template":{ "lmp": "input.lammps" }
+            
+                     },
+        {    "sys_idx": [0],"trj_freq": 100,"_idx": "01","temps":[300],"press":[1],"nsteps":20000,"ensemble":"NVT",
+            "template":{ "lmp": "input.lammps" }},
+{    "sys_idx": [0],"trj_freq": 100,"_idx": "01","temps":[300],"press":[1],"nsteps":20000,"ensemble":"NVT",
+            "template":{ "lmp": "input.lammps" }},{    "sys_idx": [0],"trj_freq": 100,"_idx": "01","temps":[300],"press":[1],"nsteps":20000,"ensemble":"NVT",
+            "template":{ "lmp": "input.lammps" }},{    "sys_idx": [0],"trj_freq": 100,"_idx": "01","temps":[300],"press":[1],"nsteps":20000,"ensemble":"NVT",
+            "template":{ "lmp": "input.lammps" }},{    "sys_idx": [0],"trj_freq": 100,"_idx": "01","temps":[300],"press":[1],"nsteps":20000,"ensemble":"NVT",
+            "template":{ "lmp": "input.lammps" }},{    "sys_idx": [0],"trj_freq": 100,"_idx": "01","temps":[300],"press":[1],"nsteps":20000,"ensemble":"NVT",
+            "template":{ "lmp": "input.lammps" }},{    "sys_idx": [0],"trj_freq": 100,"_idx": "01","temps":[300],"press":[1],"nsteps":20000,"ensemble":"NVT",
+            "template":{ "lmp": "input.lammps" }},{    "sys_idx": [0],"trj_freq": 100,"_idx": "01","temps":[300],"press":[1],"nsteps":20000,"ensemble":"NVT",
+            "template":{ "lmp": "input.lammps" }},{    "sys_idx": [0],"trj_freq": 100,"_idx": "01","temps":[300],"press":[1],"nsteps":20000,"ensemble":"NVT",
+            "template":{ "lmp": "input.lammps" }},{    "sys_idx": [0],"trj_freq": 100,"_idx": "01","temps":[300],"press":[1],"nsteps":20000,"ensemble":"NVT",
+            "template":{ "lmp": "input.lammps" }},{    "sys_idx": [0],"trj_freq": 100,"_idx": "01","temps":[300],"press":[1],"nsteps":20000,"ensemble":"NVT",
+            "template":{ "lmp": "input.lammps" }},{    "sys_idx": [0],"trj_freq": 100,"_idx": "01","temps":[300],"press":[1],"nsteps":20000,"ensemble":"NVT",
+            "template":{ "lmp": "input.lammps" }},{    "sys_idx": [0],"trj_freq": 100,"_idx": "01","temps":[300],"press":[1],"nsteps":20000,"ensemble":"NVT",
+            "template":{ "lmp": "input.lammps" }}
+            
+                        
+                      
+  ],
+
+  "_comment": " 02.fp ",
+  "fp_style":         "vasp",
+  "shuffle_poscar":   false,
+  "fp_task_max":      200,
+  "_comment":         "the maximum number of stcs to calc.",
+  "fp_task_min":      5,
+  "fp_pp_path":       "./",
+  "fp_pp_files":      ["POTCAR_Ti","POTCAR_O","POTCAR_Li"],
+  "fp_incar" :        "INCAR_c2h6",
+  "_comment":         " that's all "
+}
+
+

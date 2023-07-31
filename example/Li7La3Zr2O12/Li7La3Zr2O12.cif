@@ -1,0 +1,105 @@
+# generated using pymatgen
+data_Li7La3Zr2O12
+_symmetry_space_group_name_H-M   I4_1/acd
+_cell_length_a   13.23607000
+_cell_length_b   13.23607000
+_cell_length_c   12.70170600
+_cell_angle_alpha   90.00000000
+_cell_angle_beta   90.00000000
+_cell_angle_gamma   90.00000000
+_symmetry_Int_Tables_number   142
+_chemical_formula_structural   Li7La3Zr2O12
+_chemical_formula_sum   'Li56 La24 Zr16 O96'
+_cell_volume   2225.25695306
+_cell_formula_units_Z   8
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+  2  'x, y, z'
+  3  '-y, x+1/2, z+1/4'
+  4  '-y, x+1/2, z+1/4'
+  5  '-x+1/2, -y+1/2, z+1/2'
+  6  '-x+1/2, -y+1/2, z+1/2'
+  7  'y+1/2, -x, z+3/4'
+  8  'y+1/2, -x, z+3/4'
+  9  'x+1/2, -y, -z+1/4'
+  10  'x+1/2, -y, -z+1/4'
+  11  '-y+1/2, -x+1/2, -z'
+  12  '-y+1/2, -x+1/2, -z'
+  13  '-x, y+1/2, -z+3/4'
+  14  '-x, y+1/2, -z+3/4'
+  15  'y, x, -z+1/2'
+  16  'y, x, -z+1/2'
+  17  '-x, -y+1/2, -z+1/4'
+  18  '-x, -y+1/2, -z+1/4'
+  19  'y, -x, -z'
+  20  'y, -x, -z'
+  21  'x+1/2, y, -z+3/4'
+  22  'x+1/2, y, -z+3/4'
+  23  '-y+1/2, x+1/2, -z+1/2'
+  24  '-y+1/2, x+1/2, -z+1/2'
+  25  '-x+1/2, y+1/2, z'
+  26  '-x+1/2, y+1/2, z'
+  27  'y+1/2, x, z+1/4'
+  28  'y+1/2, x, z+1/4'
+  29  'x, -y, z+1/2'
+  30  'x, -y, z+1/2'
+  31  '-y, -x+1/2, z+3/4'
+  32  '-y, -x+1/2, z+3/4'
+  33  'x+1/2, y+1/2, z+1/2'
+  34  'x+1/2, y+1/2, z+1/2'
+  35  '-y+1/2, x, z+3/4'
+  36  '-y+1/2, x, z+3/4'
+  37  '-x, -y, z'
+  38  '-x, -y, z'
+  39  'y, -x+1/2, z+1/4'
+  40  'y, -x+1/2, z+1/4'
+  41  'x, -y+1/2, -z+3/4'
+  42  'x, -y+1/2, -z+3/4'
+  43  '-y, -x, -z+1/2'
+  44  '-y, -x, -z+1/2'
+  45  '-x+1/2, y, -z+1/4'
+  46  '-x+1/2, y, -z+1/4'
+  47  'y+1/2, x+1/2, -z'
+  48  'y+1/2, x+1/2, -z'
+  49  '-x+1/2, -y, -z+3/4'
+  50  '-x+1/2, -y, -z+3/4'
+  51  'y+1/2, -x+1/2, -z+1/2'
+  52  'y+1/2, -x+1/2, -z+1/2'
+  53  'x, y+1/2, -z+1/4'
+  54  'x, y+1/2, -z+1/4'
+  55  '-y, x, -z'
+  56  '-y, x, -z'
+  57  '-x, y, z+1/2'
+  58  '-x, y, z+1/2'
+  59  'y, x+1/2, z+3/4'
+  60  'y, x+1/2, z+3/4'
+  61  'x+1/2, -y+1/2, z'
+  62  'x+1/2, -y+1/2, z'
+  63  '-y+1/2, -x, z+1/4'
+  64  '-y+1/2, -x, z+1/4'
+loop_
+ _atom_type_symbol
+ _atom_type_oxidation_number
+  Li+  1.0
+  La3+  3.0
+  Zr4+  4.0
+  O2-  -2.0
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Li+  Li0  32  0.08051550  0.16246550  0.93085650  1
+  Li+  Li1  16  0.18121100  0.18121100  0.75000000  1
+  Li+  Li2  8  0.00000000  0.00000000  0.00000000  1
+  La3+  La3  16  0.12737000  0.25000000  0.37500000  1
+  La3+  La4  8  0.00000000  0.00000000  0.25000000  1
+  Zr4+  Zr5  16  0.00000000  0.25000000  0.12500000  1
+  O2-  O6  32  0.03461600  0.19451700  0.77870400  1
+  O2-  O7  32  0.05496300  0.10244300  0.09066700  1
+  O2-  O8  32  0.15082300  0.22322700  0.57123600  1

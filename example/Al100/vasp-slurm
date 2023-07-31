@@ -1,0 +1,14 @@
+#!/bin/bash
+#SBATCH --nodes 1
+#SBATCH --cpus-per-task 1
+#SBATCH --ntasks-per-node 128
+#SBATCH --constraint cpu
+#SBATCH --qos regular
+#SBATCH -t 12:00:00
+#SBATCH -o ll_out
+
+#export OMP_PROC_BIND=true
+#export OMP_PLACES=threads
+#export OMP_NUM_THREADS=1
+
+srun -n 128 --cpu_bind=cores ~graeme/bin/vasp_std_pm

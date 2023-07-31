@@ -1,0 +1,69 @@
+{
+	"api_version": "1.0",
+	"deepmd_version": "2.0.1",
+	"train" :[
+		{
+			"command": "dp",
+			"machine": {
+				"batch_type": "Shell",
+				"context_type": "local",
+				"local_root" : "./",
+				"remote_root": "./work"
+			},
+			"resources": {
+				"number_node": 1,
+				"cpu_per_node": 16,
+				"gpu_per_node": 1,
+				"group_size": 1
+			}
+		}
+	],
+	"model_devi":[
+		{
+			"command": "CUDA_VISIBLE_DEVICES=1 srun python /home/yinbc/test/dpgen/dpgen/Li-TiO2/generator/dimer.py",
+			"model_devi_engine":"dimer",
+			"machine": {
+				"batch_type": "Slurm",
+				"context_type": "local",
+				"local_root" : "./",
+				"remote_root": "./work"
+			},
+			"resources": {
+				
+			"custom_flags":["#!/bin/bash","#SBATCH -o job.%j.out","#SBATCH -J dimer_test"],
+                       "gpu_per_node":0, 
+			"cpu_per_node":4,
+                         "number_node":1,
+			"source_list":[],
+				"group_size":1
+                                
+			}
+		}
+	],
+	"fp":[
+		{
+		"command": "srun -n 128 ~x-graeme/bin/vasp_std",
+		"machine": {
+		"batch_type": "SlurmJobArray",
+		"context_type": "SSHContext",
+		"local_root" : "./",
+		"remote_root": "/home/x-wang3/accounts/jiaao/test-dpclient",
+		"remote_profile": {
+		"hostname": "",
+		"username": "",
+	   "key_filename": ""
+	   }
+		},
+		"resources": {
+		"source_list": [],
+		"module_list": ["intel"],
+	"custom_flags":[],
+	   "number_node": 1,
+	"cpu_per_node": 128,
+		"gpu_per_node": 0,
+		"group_size": 20,
+	"slurm_job_size": 20
+		}
+	   }
+		]
+}

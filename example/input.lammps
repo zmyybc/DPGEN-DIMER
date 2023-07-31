@@ -1,0 +1,14 @@
+
+#Initialization
+units          metal
+dimension      3
+atom_style     atomic
+
+
+
+
+#Interatomic potentials - DeepMD
+pair_style     deepmd 
+pair_coeff     * *
+
+
