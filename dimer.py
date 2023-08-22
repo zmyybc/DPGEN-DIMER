@@ -8,17 +8,13 @@ The dimer engine of model devi
 """
 import os
 import argparse
-from ase.build import bulk
-from ase import Atom, Atoms
 from ase.dimer import DimerControl, MinModeAtoms, MinModeTranslate
-from ase.visualize import view
 from ase.constraints import FixAtoms
-from ase.io import read,write
+from ase.io import read
 from ase.io.trajectory import Trajectory
 from deepmd.infer import calc_model_devi
 from deepmd.calculator import DP
 import numpy as np
-import faulthandler
 def write_lamptrj(atoms,forces,step):
     f_conf=open("conf.lmp","r")
     lines=f_conf.readlines()
@@ -74,14 +70,33 @@ def main(args):
         #TODO: YOU can also change the ways of displacement for your own example, we basically provide the gaussian displacement.
         #More information could be found at https://wiki.fysik.dtu.dk/ase/ase/dimer.html
     with DimerControl(initial_eigenmode_method='displacement',maximum_translation=args.trans,
-                      displacement_method='gauss', displacement_center=18,dimer_separation=0.0005,displacement_radius=args.radius,logfile=None, #TODO: make it adjustable
+                      displacement_method=args.method, displacement_center=args.center,dimer_separation=0.0005,displacement_radius=args.radius,logfile=None, #TODO: make it adjustable
                       ) as d_control:
         d_atoms = MinModeAtoms(atoms, d_control)
         d_atoms.displace()
         with MinModeTranslate(d_atoms, trajectory='dimer_method.traj',
                               logfile='log') as dim_rlx:
-            dim_rlx.run(fmax=0.02,steps=200)
-            traj = Trajectory('dimer_method.traj')
+            dim_rlx.run(fmax=0.02,steps=150)
+            d_atoms.write('POSCAR')
+            IS=read("POSCAR")
+            FS=read("POSCAR")
+            IS.calc=DP(model="../graph.001.pb")
+            FS.calc=DP(model="../graph.001.pb")
+            IS.positions+=d_atoms.eigenmodes[0]
+            FS.positions-=d_atoms.eigenmodes[0]
+            dyn1=BFGS(IS,trajectory="IS.traj")
+            dyn2=BFGS(FS,trajectory="FS.traj")
+            dyn1.run(fmax=0.02,steps=200)
+            dyn2.run(fmax=0.02,steps=200)
+            IS.write("IS.vasp")
+            FS.write("FS.vasp")
+            traj1 = Trajectory('IS.traj')
+            traj2=Trajectory('FS.traj')
+            traj=[]
+            for atoms in traj1:
+                traj.append(atoms)
+            for atoms in traj2:
+                traj.append(atoms)
             if not os.path.exists("traj"):
               os.system("mkdir traj")
             count=0
@@ -104,20 +119,15 @@ def main(args):
                     coor=np.array(atoms.positions).reshape([1,-1])[0]
                 else:
                     coor=np.append(coor,np.array(atoms.positions).reshape([1,-1])[0])
+              
                 forces= np.zeros([len(atoms),3])
                 write_lamptrj(atoms,forces,count)
-                 
-                 
                 count+=1
-          
             coor=np.array([coor])
             box=np.array([box])
             from deepmd.infer import DeepPot as DPot
             graphs = [DPot("../graph.000.pb"), DPot("../graph.001.pb"), DPot("../graph.002.pb"), DPot("../graph.003.pb")]
             model_devi = calc_model_devi(coor, box, atype, graphs,fname="model_devi.out",frequency=1)
-            print("finish!") 
- 
-
 
 
 if __name__ == "__main__":
@@ -127,6 +137,7 @@ if __name__ == "__main__":
     parser.add_argument("trans",type=float,default=0.1,help="max step size")
     parser.add_argument("center",type=int,default=0,help="displace center")
     parser.add_argument("radius",type=float,default=2,help="displace radius")
+    parser.add_argument("method",type=str,default="gauss",help="displacement method")
 
 
     args = parser.parse_args()

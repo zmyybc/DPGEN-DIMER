@@ -26,7 +26,10 @@ data.to_deepmd_raw('deepmd')
 data.to_deepmd_npy('deepmd')
 ```
 Besides the calculation folders, put run.py, arginfo.py, dimer.py, Templates of INCAR, param.json, machine.json, input.lammps  together also. Then you can run `python auto.py`. Then you may adjust some of the parameters for each specific example.
-`test.py`:A script which run mutiple dimer searchs and predict the potential energy of each saddle point for testing. the energy are in the `ener.txt`, and we would get each trajectory folder. 
+
+`test_process.py`:This code could generate muliple search trajectory for the given initial configuration, and give the predicted energy. The energy are in the `ener.txt`, and we would get each trajectory folder. 
+
+`test_saddle.py`: This code could generate muliple dimer search to get saddle points and corresponding barriers for the given initial configuration. The barriers are in the `barrier_sad.txt`. 
 
 ## PS:
 In our code, you just need one POTCAR, not one POTCAR for each element. 

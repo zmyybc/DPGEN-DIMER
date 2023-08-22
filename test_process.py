@@ -1,22 +1,19 @@
 # -*- coding: utf-8 -*-
 """
+This code could generate muliple search trajectory for the given initial configuration, and give the predicted energy.
+
 Created on Thu Jul  6 14:03:27 2023
 
 @author: Bangchen Yin
 """
+
 import os
-from ase.build import bulk
-from ase import Atom, Atoms
 from ase.dimer import DimerControl, MinModeAtoms, MinModeTranslate
-from ase.visualize import view
-from ase.constraints import FixAtoms
-from ase.io import read,write
+from ase.io import read
 from ase.io.trajectory import Trajectory
-from deepmd.infer import calc_model_devi
 from deepmd.calculator import DP
 import numpy as np
-import faulthandler
-from ase.calculators.vasp.vasp import Vasp
+import argparse
 def write_lamptrj(atoms,forces,step,name):
     f_conf=open("conf.lmp","r")
     lines=f_conf.readlines()
@@ -26,7 +23,6 @@ def write_lamptrj(atoms,forces,step,name):
     fname="./"+name+"/"+str(step)+".lammpstrj"
    
     posname="./"+name+"/"+str(step)+".poscar"
-    #f1=open(posname,"w")
     atoms.write(posname)
     f=open(fname,"w")
     f.write("ITEM: TIMESTEP\n")
@@ -58,34 +54,12 @@ def write_lamptrj(atoms,forces,step,name):
         for idf in forces[atom.index]:
             f.write(str(idf)+" ")
         f.write("\n")
-def parse_parameters():
-    f=open("input.lammps","r")
-    lines=f.readlines()
-    parameters={}
-    for line in lines:
-       if not line.startswith("#"):
-        start=line.find(" ")
-        if "mass" in line:
-            if "masses" in parameters.keys():
-                parameters["masses"].append(line[start+1:].strip())
-            else:
-                parameters["masses"]=[line[start+1:].strip()]
-        elif "pair_coeff" in line:
-             parameters["pair_coeff"]=[line[start+1:].strip()]
-        else:
-             parameters[line[:start]]=line[start+1:].strip()
-    return parameters
-def read_conf():
-   
-    atoms=read("conf.lmp",format="lammps-data",style="atomic")
-    
-    return atoms
 def main(i):
-    name="traj"+str(i)
-    parameters=parse_parameters()
-    #TODO: modify the path of initial configuration
-    atoms=read("/home/yinbc/test/dpgen/dpgen/graph/iter.000009/01.model_devi/confs/000.0000.poscar")
-    atoms.calc = DP(model="../graph.001.pb")
+ 
+    #TODO: modify the path of initial configuration and path of the trained model
+    atoms=read(args.ini_conf_path)
+    atoms.calc = DP(model="args.model_path")
+    #TODO: modify the dimer parameters
     with DimerControl(initial_eigenmode_method='displacement',maximum_translation=0.1,
                       displacement_method='gauss', displacement_center=20,dimer_separation=0.001,displacement_radius=3,logfile=None, #TODO: make it adjustable
                       ) as d_control:
@@ -98,47 +72,47 @@ def main(i):
             
             
             dim_rlx.run(fmax=0.02,steps=200)
-            traj = Trajectory('dimer_method.traj')
+            d_atoms.write('POSCAR')
+            IS=read("POSCAR")
+            FS=read("POSCAR")
+            IS.calc=DP(model="args.model_path")
+            FS.calc=DP(model="args.model_path")
+            IS.positions+=d_atoms.eigenmodes[0]
+            FS.positions-=d_atoms.eigenmodes[0]
+            dyn1=BFGS(IS,trajectory="IS.traj")
+            dyn2=BFGS(FS,trajectory="FS.traj")
+            dyn1.run(fmax=0.02,steps=200)
+            dyn2.run(fmax=0.02,steps=200)
+            IS.write("IS.vasp")
+            FS.write("FS.vasp")
+            traj1 = Trajectory('IS.traj')
+            traj2=Trajectory('FS.traj')
+            traj=[]
+            for atoms in traj1:
+                traj.append(atoms)
+            for atoms in traj2:
+                traj.append(atoms)
             if not os.path.exists(name):
               os.system("mkdir "+name)
             count=0
-            box=[]
-            coor=[]
-            atype=[]
-            k=0
-            pre=""
-            for atom in atoms:
-               if atom.symbol != pre:
-                 pre=atom.symbol
-                 k+=1
-               atype.append(k-1)
             for atoms in traj:
-              
-                if box ==[]:
-                    box= np.array(atoms.cell).reshape([1,-1])[0]
-                else:
-                   box=np.append(box,np.array(atoms.cell).reshape([1,-1])[0])
-                 
-                if coor==[]:
-                    coor=np.array(atoms.positions).reshape([1,-1])[0]
-                else:
-                    coor=np.append(coor,np.array(atoms.positions).reshape([1,-1])[0])
-              
-                forces= np.zeros([21,3])
+                forces= np.zeros([len(atoms),3])
                 write_lamptrj(atoms,forces,count,name)
-                 
-                 
                 count+=1
             coor=np.array([coor])
             box=np.array([box])
             atoms=traj[-1]
-            atoms.calc=DP(model="../graph.001.pb")
+            atoms.calc=DP(model="args.model_path")
             return            atoms.get_potential_energy()
 
 
 if __name__ == "__main__":
   f=open("ener.txt","w")
+  parser = argparse.ArgumentParser()
+  parser.add_argument("ini_conf_path", type=str,default=".", help="path of initial configuration, better be a poscar")
+  parser.add_argument("model_path", type=str,default=".", help="path of the trained model")
+  args = parser.parse_args()
   for i in range(10):
 
-     print("SEARCH "+str(i+1),main(i),file=f)
+     print("SEARCH "+str(i+1),main(i,args),file=f)
 
